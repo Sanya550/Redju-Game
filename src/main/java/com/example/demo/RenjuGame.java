@@ -16,6 +16,7 @@ public class RenjuGame extends Application {
     private static final int BOARD_SIZE = SIZE * CELL_SIZE;
     private int[][] board = new int[SIZE][SIZE];
     private boolean isBlackTurn = true;
+    private static int WIN_COUNT = 5;
 
     public static void main(String[] args) {
         launch(args);
@@ -43,8 +44,9 @@ public class RenjuGame extends Application {
         gc.setStroke(Color.BLACK);
 
         for (int i = 0; i < SIZE; i++) {
-            gc.strokeLine(i * CELL_SIZE + CELL_SIZE / 2, CELL_SIZE / 2, i * CELL_SIZE + CELL_SIZE / 2, BOARD_SIZE - CELL_SIZE / 2);
-            gc.strokeLine(CELL_SIZE / 2, i * CELL_SIZE + CELL_SIZE / 2, BOARD_SIZE - CELL_SIZE / 2, i * CELL_SIZE + CELL_SIZE / 2);
+            double pos = i * CELL_SIZE + CELL_SIZE / 2.0;
+            gc.strokeLine(pos, CELL_SIZE / 2.0, pos, BOARD_SIZE - CELL_SIZE / 2.0);// Vertical
+            gc.strokeLine(CELL_SIZE / 2.0, pos, BOARD_SIZE - CELL_SIZE / 2.0, pos);//Horizontal
         }
     }
 
@@ -63,11 +65,14 @@ public class RenjuGame extends Application {
         }
     }
 
-    private void drawStone(GraphicsContext gc, int row, int col, boolean isBlack) {
+    public void drawStone(GraphicsContext gc, int row, int col, boolean isBlack) {
+        double offset = 5.0;
+        double diameter = CELL_SIZE - 2 * offset;
+
         gc.setFill(isBlack ? Color.BLACK : Color.WHITE);
-        gc.fillOval(col * CELL_SIZE + 5, row * CELL_SIZE + 5, CELL_SIZE - 10, CELL_SIZE - 10);
+        gc.fillOval(col * CELL_SIZE + offset, row * CELL_SIZE + offset, diameter, diameter);
         gc.setStroke(Color.BLACK);
-        gc.strokeOval(col * CELL_SIZE + 5, row * CELL_SIZE + 5, CELL_SIZE - 10, CELL_SIZE - 10);
+        gc.strokeOval(col * CELL_SIZE + offset, row * CELL_SIZE + offset, diameter, diameter);
     }
 
     private boolean checkWinCondition(int row, int col) {
@@ -82,12 +87,12 @@ public class RenjuGame extends Application {
         int count = 1;
         count += countStones(row, col, player, dRow, dCol);
         count += countStones(row, col, player, -dRow, -dCol);
-        return count == 5;
+        return count == WIN_COUNT;
     }
 
     private int countStones(int row, int col, int player, int dRow, int dCol) {
         int count = 0;
-        for (int i = 1; i < 5; i++) {
+        for (int i = 1; i < WIN_COUNT; i++) {
             int newRow = row + i * dRow;
             int newCol = col + i * dCol;
             if (newRow < 0 || newRow >= SIZE || newCol < 0 || newCol >= SIZE || board[newRow][newCol] != player) {
