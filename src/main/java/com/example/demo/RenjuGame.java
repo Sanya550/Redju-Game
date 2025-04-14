@@ -16,7 +16,7 @@ public class RenjuGame extends Application {
     private static final int BOARD_SIZE = SIZE * CELL_SIZE;
     private int[][] board = new int[SIZE][SIZE];
     private boolean isBlackTurn = true;
-    private static int WIN_COUNT = 5;
+    private int WIN_COUNT = 5;
 
     public static void main(String[] args) {
         launch(args);
@@ -65,7 +65,7 @@ public class RenjuGame extends Application {
         }
     }
 
-    public void drawStone(GraphicsContext gc, int row, int col, boolean isBlack) {
+    private void drawStone(GraphicsContext gc, int row, int col, boolean isBlack) {
         double offset = 5.0;
         double diameter = CELL_SIZE - 2 * offset;
 
